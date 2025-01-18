@@ -120,7 +120,9 @@ def gaussian_elimination_to_int(A, b):
     :return: Vector solución x con valores enteros.
     """
     n = len(A)
-    A = A.astype(float)  # Trabajamos inicialmente con flotantes para cálculos internos
+    
+    # Trabajamos inicialmente con flotantes para cálculos internos
+    A = A.astype(float)
     b = b.astype(float)
 
     # Eliminación Gaussiana
@@ -144,19 +146,13 @@ def gaussian_elimination_to_int(A, b):
     # Sustitución hacia atrás
     x = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i]
+        x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i] #eliminamos los puntos flotantes para evitrar modificaciones no deseadas
 
     # Convertir a enteros
     x = np.round(x).astype(int)
     return x
 
-# Ejemplo de uso
-# A = np.array([[2, -1, 1],
-#               [1, 3, 2],
-#               [1, 0, 0]])
-
-# b = np.array([2, 6, 1])
-
+# # Ejemplo de uso
 A = np.array([[2, -1, 1], [1, 3, 2], [1, 0, 0]])
 b = np.array([2, 6, 1])
 
@@ -199,7 +195,7 @@ print("Vector solución x :", x)
 #         for j in range(i + 1, n):
 #             factor = A[j][i] / A[i][i]
 #             for k in range(i, n):
-#                 A[j][k] -= factor * A[i][k]
+#                 A[j][k:] -= factor * A[i][k:]
 #             b[j] -= factor * b[i]
 
 #     # Back substitution
@@ -208,16 +204,16 @@ print("Vector solución x :", x)
 #         x[i] = b[i]
 #         for j in range(i + 1, n):
 #             x[i] -= A[i][j] * x[j]
-#         x[i] //= A[i][i]
+#         x[i] /= A[i][i]
 
 #     return x
 
-# # Example of usage
-# # A = [[2, -1, 1],
-# #      [3, 3, 9],
-# #      [3, 3, 5]]
+# Example of usage
+# A = [[2, -1, 1],
+#      [3, 3, 9],
+#      [3, 3, 5]]
 
-# # b = [2, -1, 3]
+# b = [2, -1, 3]
 
 # A = [[2, -1, 1], [1, 3, 2], [1, 0, 0]]
 # b = [2, 6, 1]
