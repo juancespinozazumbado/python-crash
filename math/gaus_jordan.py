@@ -104,54 +104,114 @@
 
 
 
-import numpy as np
+
+
+############## Using nunpuy
+
+# import numpy as np
+
+# def gaussian_elimination_to_int(A, b):
+#     """
+#     Resuelve el sistema de ecuaciones lineales Ax = b usando eliminación gaussiana.
+#     Trabaja exclusivamente con enteros.
+#     :param A: Matriz cuadrada de coeficientes (n x n).
+#     :param b: Vector columna de términos independientes (n x 1).
+#     :return: Vector solución x con valores enteros.
+#     """
+#     n = len(A)
+#     A = A.astype(float)  # Trabajamos inicialmente con flotantes para cálculos internos
+#     b = b.astype(float)
+
+#     # Eliminación Gaussiana
+#     for i in range(n):
+#         # Pivoteo parcial para asegurar que A[i, i] no sea cero
+#         if A[i, i] == 0:
+#             for k in range(i + 1, n):
+#                 if A[k, i] != 0:
+#                     A[[i, k]] = A[[k, i]]  # Intercambio de filas
+#                     b[[i, k]] = b[[k, i]]
+#                     break
+#             else:
+#                 raise ValueError("La matriz es singular y no tiene solución única.")
+
+#         # Escalonar
+#         for j in range(i + 1, n):
+#             factor = A[j, i] / A[i, i]
+#             A[j, i:] -= factor * A[i, i:]
+#             b[j] -= factor * b[i]
+
+#     # Sustitución hacia atrás
+#     x = np.zeros(n)
+#     for i in range(n - 1, -1, -1):
+#         x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i]
+
+#     # Convertir a enteros
+#     x = np.round(x).astype(int)
+#     return x
+
+# # Ejemplo de uso
+# A = np.array([[2, -1, 1],
+#               [1, 3, 2],
+#               [1, 0, 0]])
+
+# b = np.array([2, 6, 1])
+
+# x = gaussian_elimination_to_int(A, b)
+
+# print("Vector solución x :", x)
+
+
+
+
+
+
+### Whitout nunpy 
 
 def gaussian_elimination_to_int(A, b):
     """
-    Resuelve el sistema de ecuaciones lineales Ax = b usando eliminación gaussiana.
-    Trabaja exclusivamente con enteros.
-    :param A: Matriz cuadrada de coeficientes (n x n).
-    :param b: Vector columna de términos independientes (n x 1).
-    :return: Vector solución x con valores enteros.
+    Solve the linear system Ax = b using Gaussian elimination.
+    Operates exclusively with integers.
+    :param A: Coefficient matrix (list of lists, n x n).
+    :param b: Independent term vector (list, n).
+    :return: Solution vector x as integers.
     """
     n = len(A)
-    A = A.astype(float)  # Trabajamos inicialmente con flotantes para cálculos internos
-    b = b.astype(float)
 
-    # Eliminación Gaussiana
+    # Forward elimination
     for i in range(n):
-        # Pivoteo parcial para asegurar que A[i, i] no sea cero
-        if A[i, i] == 0:
+        # Partial pivoting
+        if A[i][i] == 0:
             for k in range(i + 1, n):
-                if A[k, i] != 0:
-                    A[[i, k]] = A[[k, i]]  # Intercambio de filas
-                    b[[i, k]] = b[[k, i]]
+                if A[k][i] != 0:
+                    A[i], A[k] = A[k], A[i]  # Swap rows
+                    b[i], b[k] = b[k], b[i]
                     break
             else:
-                raise ValueError("La matriz es singular y no tiene solución única.")
+                raise ValueError("Matrix is singular or no unique solution exists.")
 
-        # Escalonar
+        # Eliminate entries below the pivot
         for j in range(i + 1, n):
-            factor = A[j, i] / A[i, i]
-            A[j, i:] -= factor * A[i, i:]
+            factor = A[j][i] // A[i][i]
+            for k in range(i, n):
+                A[j][k] -= factor * A[i][k]
             b[j] -= factor * b[i]
 
-    # Sustitución hacia atrás
-    x = np.zeros(n)
+    # Back substitution
+    x = [0] * n
     for i in range(n - 1, -1, -1):
-        x[i] = (b[i] - np.dot(A[i, i + 1:], x[i + 1:])) / A[i, i]
+        x[i] = b[i]
+        for j in range(i + 1, n):
+            x[i] -= A[i][j] * x[j]
+        x[i] //= A[i][i]
 
-    # Convertir a enteros
-    x = np.round(x).astype(int)
     return x
 
-# Ejemplo de uso
-A = np.array([[2, -1, 1],
-              [1, 3, 2],
-              [1, 0, 0]])
+# Example of usage
+A = [[2, -1, 1],
+     [3, 3, 9],
+     [3, 3, 5]]
 
-b = np.array([2, 6, 1])
+b = [2, -1, 3]
 
 x = gaussian_elimination_to_int(A, b)
-
-print("Vector solución x :", x)
+print("Solution vector x:", x)
