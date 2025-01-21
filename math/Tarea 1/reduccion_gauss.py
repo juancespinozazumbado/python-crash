@@ -1,4 +1,3 @@
-
 import numpy as np
 
 intro =  """
@@ -46,9 +45,16 @@ def gaussian_elimination_to_int(A, b):
 
 print(intro)
 # # Ejemplo de uso
-A = np.array([[2, -1, 1], [1, 3, 2], [1, 0, 0]])
-b = np.array([2, 6, 1])
+# A = np.array([[2, -1, 1], [1, 3, 2], [1, 0, 0]])
+# b = np.array([2, 6, 1])
+# salida esperada [ 1 1 1 ]
 
+A = np.array([[2.0, -1.0, 1.0],
+              [1.0,  3.0, 2.0],
+              [1.0, -1.0, 2.0]])
+
+b = np.array([8.0, 13.0, 5.0])
+#Salida esperada [ 4 2 1 ]
 print("Matriz: ", A)
 print("Vector: ", b)
 
